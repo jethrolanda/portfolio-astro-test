@@ -1,58 +1,84 @@
 ---
 interface Props {
 	href: string;
+	/** `primary` is the filled accent button; `secondary` is an outlined, quieter option. */
+	variant?: 'primary' | 'secondary';
 }
 
-const { href } = Astro.props;
+const { href, variant = 'primary' } = Astro.props;
 ---
 
-<a href={href}>
+<a href={href} class:list={['button', variant]}>
 	<slot />
 </a>
 
 <style>
-	a {
-		position: relative;
-		display: flex;
-		place-content: center;
+	.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-2);
+		min-height: 2.75rem; /* 44px touch target */
+		padding: 0.75rem 1.5rem;
+		border: 1px solid transparent;
+		border-radius: var(--radius-full);
+		font-size: var(--text-base);
+		font-weight: 600;
+		line-height: 1.2;
 		text-align: center;
-		padding: 0.56em 2em;
-		gap: 0.8em;
-		color: var(--accent-text-over);
 		text-decoration: none;
-		line-height: 1.1;
-		border-radius: 999rem;
-		overflow: hidden;
-		background: var(--gradient-accent-orange);
-		box-shadow: var(--shadow-md);
 		white-space: nowrap;
-	}
-
-	@media (min-width: 20em) {
-		a {
-			font-size: var(--text-lg);
-		}
-	}
-
-	/* Overlay for hover effects. */
-	a::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		pointer-events: none;
-		transition: background-color var(--theme-transition);
-		mix-blend-mode: overlay;
-	}
-
-	a:focus::after,
-	a:hover::after {
-		background-color: hsla(var(--gray-999-basis), 0.3);
+		transition:
+			background-color var(--theme-transition),
+			border-color var(--theme-transition),
+			box-shadow var(--theme-transition),
+			transform var(--theme-transition);
 	}
 
 	@media (min-width: 50em) {
-		a {
-			padding: 1.125rem 2.5rem;
-			font-size: var(--text-xl);
+		.button {
+			min-height: 3rem;
+			padding-inline: 1.75rem;
+			font-size: var(--text-md);
+		}
+	}
+
+	.primary {
+		color: var(--on-accent);
+		background-color: var(--accent-solid);
+		box-shadow: 0 6px 20px -8px var(--accent);
+	}
+
+	.primary:hover {
+		background-color: var(--accent-solid-hover);
+		box-shadow: 0 10px 28px -8px var(--accent);
+		transform: translateY(-1px);
+	}
+
+	.secondary {
+		color: var(--text);
+		background-color: transparent;
+		border-color: var(--border-strong);
+	}
+
+	.secondary:hover {
+		border-color: var(--accent);
+		background-color: var(--accent-soft);
+	}
+
+	.button:active {
+		transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.primary:hover {
+			transform: none;
+		}
+	}
+
+	@media (forced-colors: active) {
+		.button {
+			border-color: ButtonText;
 		}
 	}
 </style>

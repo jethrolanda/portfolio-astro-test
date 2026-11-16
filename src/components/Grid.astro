@@ -14,14 +14,14 @@ const { variant } = Astro.props;
 	.grid {
 		display: grid;
 		grid-auto-rows: 1fr;
-		gap: 1rem;
+		gap: var(--space-6);
 		list-style: none;
 		padding: 0;
 	}
 
 	.grid.small {
 		grid-template-columns: 1fr 1fr;
-		gap: 1.5rem;
+		gap: var(--space-4);
 	}
 
 	/* If last row contains only one item, make it span both columns. */
@@ -32,22 +32,22 @@ const { variant } = Astro.props;
 	@media (min-width: 50em) {
 		.grid {
 			grid-template-columns: 1fr 1fr;
-			gap: 4rem;
+			gap: var(--space-10);
 		}
 
 		.grid.offset {
-			--row-offset: 7.5rem;
+			--row-offset: 4rem;
 			padding-bottom: var(--row-offset);
 		}
 
-		/* Shift first item in each row vertically to create staggered effect. */
-		.grid.offset > :global(:nth-child(odd)) {
+		/* Shift every second item vertically to create a gentle staggered effect. */
+		.grid.offset > :global(:nth-child(even)) {
 			transform: translateY(var(--row-offset));
 		}
 
-		/* If last row contains only one item, display it in the second column. */
+		/* A lone last item sits in the first column with no shift. */
 		.grid.offset > :global(:last-child:nth-child(odd)) {
-			grid-column: 2 / 3;
+			grid-column: auto;
 			transform: none;
 		}
 
@@ -55,11 +55,11 @@ const { variant } = Astro.props;
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: center;
-			gap: 2rem;
+			gap: var(--space-6);
 		}
 
 		.grid.small > :global(*) {
-			flex-basis: 20rem;
+			flex-basis: 16rem;
 		}
 	}
 </style>
